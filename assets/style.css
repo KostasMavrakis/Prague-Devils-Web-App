@@ -1,0 +1,74 @@
+/* Disable hover effect on rows */
+.dash-spreadsheet .dash-cell {
+    background-color: transparent !important;
+}
+
+.dash-spreadsheet .dash-cell.focused {
+    background-color: transparent !important; border: none !important;
+}
+
+.dash-table-tooltip {
+    background-color: white !important; border: 1px solid lightgray !important;
+    color: black !important;
+    text-align: center !important;
+    font-weight: bold !important;
+    font-size: 14px !important;
+    padding: 8px; /* Add some padding inside the tooltip */
+    border-radius: 4px; /* Add rounded corners for a smoother appearance */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.custom-tooltip {
+    background-color: white !important;
+    border: 1px solid lightgrey !important;
+    color: black !important;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    padding: 5px;
+}
+
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner table {
+    --hover: transparent !important;
+  }
+
+/* dropdown menu options */
+.Select-value-label {
+    background-color: transparent !important;
+    color: white !important;
+ }
+
+/* Ensure no blur or background effects are applied to cards */
+.card-body {
+    backdrop-filter: transparent !important;
+    filter: transparent !important;
+    background: transparent !important;
+    box-shadow: transparent !important;
+    text-align: center !important;
+}
+
+/* Remove blurry background from parent containers */
+.dash-bootstrap {
+    backdrop-filter: none !important;
+    filter: none !important;
+    background: none !important;
+    text-align: center !important;
+}
+
+/* Specifically for cards */
+.card-body, .card {
+    backdrop-filter: none !important;
+    filter: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    text-align: center !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.card-column {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
