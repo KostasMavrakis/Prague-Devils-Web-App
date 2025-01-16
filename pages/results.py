@@ -13,7 +13,7 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
          "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
 
 # Add the path to your 'credentials.json' file
-creds = ServiceAccountCredentials.from_json_keyfile_name("C:\\Users\\Kostas Mavrakis\\Downloads\\Prague Devils Web App\\assets\\credentials.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
 client = gspread.authorize(creds)
 
 # Open the Google Sheet by name or URL
