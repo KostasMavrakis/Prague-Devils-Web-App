@@ -1,5 +1,5 @@
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+import streamlit as st
+from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 import dash
 from dash import dcc, html, Input, Output, State, callback
@@ -10,23 +10,13 @@ import dash_bootstrap_components as dbc
 # Initialize the Dash app
 dash.register_page(__name__, path='/correlation', name="Correlation")
 
-# Set up the Google Sheets API client
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets",
-         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+# Select the worksheet using the url
+url = ""
 
-# Add the path to your 'credentials.json' file
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
-client = gspread.authorize(creds)
-
-# Open the Google Sheet by name or URL
-sheet = client.open('Prague Devils 2018-2024')  
-
-# Select the worksheet by name
-worksheet = sheet.worksheet("Chart Preparation 2023-2024")
+conn = st.connection("gsheets", type=GSheetsConnection)
 
 # Fetch the data from the worksheet
-data = worksheet.get_all_records()
-
+data = conn.read(spreadsheet=url)
 # Convert data to pandas DataFrame
 df = pd.DataFrame(data)
 
