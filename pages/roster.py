@@ -1,5 +1,7 @@
+import json
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from google.cloud import secretmanager
 import pandas as pd
 import dash
 from dash import html, dcc, dash_table, Input, Output, callback
@@ -9,23 +11,41 @@ import dash_bootstrap_components as dbc
 # Initialize the Dash app
 dash.register_page(__name__, path='/roster', name="Roster")
 
-# Set up the Google Sheets API client
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets",
-         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+# Function to access credentials from Secret Manager
+def get_gspread_client_from_secret(secret_id, project_id, scopes):
+    
+    # Create the Secret Manager client
+    client = secretmanager.SecretManagerServiceClient()
 
-# Add the path to your 'credentials.json' file
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
-client = gspread.authorize(creds)
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
+    
+    # Access the secret version
+    response = client.access_secret_version(name=name)
+    secret_payload = response.payload.data.decode("UTF-8")
+    
+    # Load JSON credentials from secret and authorize
+    creds_dict = json.loads(secret_payload)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scopes)
+    return gspread.authorize(creds)
+
+# Set up the Google Sheets API client
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+project_id = "google_project_id"
+secret_id = "google_secret_id"
+
+# Now use this client:
+gspread_client = get_gspread_client_from_secret(secret_id, project_id, scope)
 
 # Open the Google Sheet by name or URL
-sheet = client.open('Prague Devils 2018-2024')  
+sheet = gspread_client.open('google_sheet_file_name')  
 
 # Select the worksheet by name
-worksheet = sheet.worksheet("All Players")
+worksheet = sheet.worksheet("worksheet_name")
 
-# Fetch the data from the worksheet
+# Fetch the data and convert it to DataFrame
 data = worksheet.get_all_records()
 
+# Convert data to pandas DataFrame
 df = pd.DataFrame(data)
 
 # Handle decimal separator conversion
@@ -164,19 +184,22 @@ layout = dbc.Container([
         sort_mode="single",         # sort across 'multi' or 'single' columns
         column_selectable="multi",  # allow users to select 'multi' or 'single' columns
         style_data={
-            'backgroundColor': 'transparent',
+            "minWidth": "145px",
+            "width": "auto",
+            "maxWidth": "350px",
+            'backgroundColor': 'rgb(0, 43, 54)',
             'color': 'white',
-            'color:hover': 'transparent',
             'border': '1px solid white',
-            'textAlign': 'center'
+            'textAlign': 'center',
+            "height": "auto"
         },
+        fixed_rows={"headers": True},
         style_header={
-            'backgroundColor': 'transparent',
+            'backgroundColor': 'rgb(0, 43, 54)',
             'color': 'white',
             'fontWeight': 'bold',
-            'border': '1.5px solid white',
             'textAlign': 'center',
-            'grid-column': '1 / span 2'  # Spans both columns
+            "whiteSpace": "normal",
         },     
         style_table={
             'overflowX': 'auto',
