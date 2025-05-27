@@ -72,3 +72,45 @@
     padding-left: 5px !important;
     padding-right: 5px !important;
 }
+
+/* Default sizes for larger screens */
+.carousel-caption h5 {
+    font-size: 2vw;
+}
+
+.carousel-caption p {
+    font-size: 1.5vw;
+}
+
+/* Medium devices (tablets, small desktops) */
+@media (max-width: 768px) {
+    .carousel-caption h5 {
+        font-size: 4vw;
+    }
+    .carousel-caption p {
+        font-size: 3vw;
+    }
+}
+
+/* Small devices (phones) */
+@media (max-width: 480px) {
+    .carousel-caption h5 {
+        font-size: 3.5vw; /* Decrease from 6vw */
+        line-height: 1.2;
+    }
+    .carousel-caption p {
+        font-size: 2.8vw; /* Decrease from 5vw */
+        line-height: 1.2;
+    }
+}
+
+/* Extra-small devices (like iPhone SE or similar) */
+@media (max-width: 400px) {
+    .carousel-caption h5 {
+        font-size: 3vw;
+    }
+
+    .carousel-caption p {
+        font-size: 2.5vw;
+    }
+}
