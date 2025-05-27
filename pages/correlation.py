@@ -1,5 +1,7 @@
-import streamlit as st
-from streamlit_gsheets import GSheetsConnection
+import json
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from google.cloud import secretmanager
 import pandas as pd
 import dash
 from dash import dcc, html, Input, Output, State, callback
@@ -10,13 +12,40 @@ import dash_bootstrap_components as dbc
 # Initialize the Dash app
 dash.register_page(__name__, path='/correlation', name="Correlation")
 
-# Select the worksheet using the url
-url = ""
+# Function to access credentials from Secret Manager
+def get_gspread_client_from_secret(secret_id, project_id, scopes):
+    
+    # Create the Secret Manager client
+    client = secretmanager.SecretManagerServiceClient()
 
-conn = st.connection("gsheets", type=GSheetsConnection)
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
+    
+    # Access the secret version
+    response = client.access_secret_version(name=name)
+    secret_payload = response.payload.data.decode("UTF-8")
+    
+    # Load JSON credentials from secret and authorize
+    creds_dict = json.loads(secret_payload)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scopes)
+    return gspread.authorize(creds)
 
-# Fetch the data from the worksheet
-data = conn.read(spreadsheet=url)
+# Set up the Google Sheets API client
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+project_id = "prague-devils-412311"
+secret_id = "GOOGLE_SHEETS_CREDS"
+
+# Now use this client:
+gspread_client = get_gspread_client_from_secret(secret_id, project_id, scope)
+
+# Open the Google Sheet by name or URL
+sheet = gspread_client.open('Prague Devils 2018-2024')  
+
+# Select the worksheet by name
+worksheet = sheet.worksheet("Chart Preparation 2023-2024")
+
+# Fetch the data and convert it to DataFrame
+data = worksheet.get_all_records()
+
 # Convert data to pandas DataFrame
 df = pd.DataFrame(data)
 
@@ -24,14 +53,11 @@ df = pd.DataFrame(data)
 for column in ["X: Weighted Average per Match", "Y: Average Age", "Y: Percentage of Italians in the Team"]:
     df[column] = df[column].astype(str).str.replace(',', '.').astype(float)/100
 
-layout = dbc.Container(
-    [
-        dbc.Row(
-            [
-                dbc.Col(
-                    [
-                        dcc.Dropdown(
-                            id="y-axis-dropdown",
+layout = dbc.Container([
+    dbc.Row([
+            dbc.Col([
+                dcc.Dropdown(
+                    id="y-axis-dropdown",
                             options=[
                                 {"label": "Average Age", "value": "Y: Average Age"},
                                 {"label": "Percentage of Italians", "value": "Y: Percentage of Italians in the Team"},
@@ -42,54 +68,56 @@ layout = dbc.Container(
                                 "background-color": "transparent",
                                 "color": "black",
                                 "font-weight": "bold",
-                                "width": "50%",
+                                "width": "100%",
                             },
-                        ),
-                        dcc.Graph(id="line-chart", style={"height": "450px"}),
-                        # style={"display": "inline-block", "verticalAlign": "top"},
-                    ],
-                    xs=10, sm=8, md=8, lg=6, xl=5,  # 85% of the page
+                )
+            ], xs=10, sm=8, md=3, lg=3, xl=3)
+        ], className="mb-3"),
+
+        dbc.Row([
+            dbc.Col([
+                dcc.Graph(id="line-chart", config={"responsive": True}, style={"height": "100%", "width": "100%"})
+            ], xs=12, sm=12, md=6, lg=6, xl=6, style={'marginBottom': '60px'})
+        ]),
+
+        dbc.Row([
+            dbc.Col([
+                dbc.Card([
+                    dbc.CardBody([
+                        html.H4("Correlation Coefficient", style={"fontSize": "30px", "fontWeight": "bold", "margin-right": "10px"}, className="card-title"),
+                        html.P(id="correlation-coefficient", className="card-text"),
+                    ]),                    
+                ], 
+                className="mb-4",
+                style={
+                    "backgroundColor": "transparent",
+                    "border": "1px solid white",
+                    "borderRadius": "10px",
+                    "padding": "20px",
+                    "textAlign": "center",
+                    "margin-top": "10px",
+                    "color": "white",
+                    "fontWeight": "bold",
+                    "fontSize": "30px",
+                    "position": "relative",
+                    "height": "240px",
+                    "width": "240px"},                
                 ),
-                dbc.Col(
-                    [
-                        dbc.Card(
-                            dbc.CardBody(
-                                [
-                                    html.H4("Correlation Coefficient", className="card-title"),
-                                    html.P(id="correlation-coefficient", className="card-text"),
-                                ]
-                            ),
-                            className="mb-3",
-                            style={
-                                "backgroundColor": "transparent",
-                                "border": "1px solid white",
-                                "borderRadius": "10px",
-                                "padding": "20px",
-                                "margin": "0 10px",
-                                "textAlign": "center",
-                                "color": "white",
-                                "fontSize": "30px",
-                                "fontWeight": "bold",
-                                "position": "relative",
-                                "height": "240px",
-                                "width": "260px",
-                            },
-                        ),
-                        dbc.Tooltip(
+                dbc.Tooltip(
                             id="correlation-tooltip",
                             target="correlation-coefficient",
                             className="custom-tooltip",
                         ),
-                    ],
-                    xs=10, sm=5, md=2, lg=6, xl=5,  # 15% of the page
-                    style={"display": "flex", "alignItems": "center", "justifyContent": "center"},
-                ),
-            ]
-        )
-    ],
-    fluid=True,
-    className="mt-5",
-)
+            ], 
+            xs=12, sm=12, md=3, lg=3, xl=3,
+            style={"display": "flex", "alignItems": "center", "justifyContent": "center"},
+            ),
+        ]),
+
+],
+fluid=True,
+className="mt-5",
+)  
 
 # Callbacks
 @callback(
@@ -152,6 +180,8 @@ def update_components(y_column):
 
     # Update layout to remove outer border lines and y-axis
     fig.update_layout(
+        autosize=True,
+        height=None,  # Let container decide
         hovermode=False,  # Disable hover tooltip
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
@@ -171,6 +201,11 @@ def update_components(y_column):
         margin=dict(l=20, r=20, t=20, b=20),
         showlegend=True,
         legend=dict(
+            orientation="h",       # Horizontal layout
+            yanchor="bottom",
+            y=1.1,                 # Position above the chart (higher = further up)
+            xanchor="center",
+            x=0.5,                 # Centered horizontally
             font=dict(size=14, color="white", family="Arial"),
             bgcolor="rgba(0,0,0,0)"
         )
