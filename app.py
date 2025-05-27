@@ -1,13 +1,11 @@
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 import dash
-from dash import html, dcc, page_registry, page_container
+from dash import html, page_registry, page_container
 import dash_bootstrap_components as dbc
 
 LOGO = "https://pibfal.com/wp-content/uploads/2018/08/Prague-Devils-126x128.png"
 
 # Create the dash app
-app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.SOLAR, '/assets/custom.css'])
+app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.SOLAR, '/assets/style.css'], meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1.0"}])
 
 # Define the navigation bar
 navbar = dbc.NavbarSimple(
@@ -135,4 +133,5 @@ app.layout = html.Div([
 
 # Run the dash app
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=False, host="0.0.0.0", port=8080)
+    
