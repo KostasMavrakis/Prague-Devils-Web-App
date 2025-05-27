@@ -29,17 +29,17 @@ def get_gspread_client_from_secret(secret_id, project_id, scopes):
 
 # Set up the Google Sheets API client
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
-project_id = "prague-devils-412311"
-secret_id = "GOOGLE_SHEETS_CREDS"
+project_id = "google_project_id"
+secret_id = "google_secret_id"
 
 # Now use this client:
 gspread_client = get_gspread_client_from_secret(secret_id, project_id, scope)
 
 # Open the Google Sheet by name or URL
-sheet = gspread_client.open('Prague Devils 2018-2024')  
+sheet = gspread_client.open('google_sheet_file_name')  
 
 # Select the worksheet by name
-worksheet = sheet.worksheet("All Players")
+worksheet = sheet.worksheet("worksheet_name")
 
 # Fetch the data and convert it to DataFrame
 data = worksheet.get_all_records()
