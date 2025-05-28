@@ -1,4 +1,4 @@
-#⚽ Football Team Stats Tracker
+⚽ #Football Team Stats Tracker
 
 This is a multi-page interactive web application built using Dash, Plotly, and dash-bootstrap-components to track and visualize the performance and statistics of an amateur football team. The app pulls data directly from a Google Sheets file stored in Google Drive and is deployed on Google Cloud Platform (GCP).
 
