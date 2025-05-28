@@ -55,6 +55,19 @@ The app is deployed on Google Cloud Platform (App Engine or Cloud Run). Make sur
 - Store your service account key as a secret.
 - Retrieve the secret in your app's startup code to authenticate and fetch data.
 
+🛠️ Getting Started Locally
+To run this app locally:
+- Create a Service Account Key from Google Cloud Console and download it as a JSON file.
+- Replace the part of the script in the individual pages that is used for reading the credentials at runtime and for authenticating with the following 2 lines of code that make a reference to the downloaded JSON file:
+
+# Set up the Google Sheets API client
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets",
+         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+
+# Add the path to your 'credentials.json' file
+creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+client = gspread.authorize(creds)  
+
 🧑‍💻 Author
 Kostas
 Built with 💚 by a passionate footballer and data enthusiast.
