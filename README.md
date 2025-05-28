@@ -67,7 +67,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", sco
 client = gspread.authorize(creds)  
 
 🧑‍💻 Author
-< br / >Kostas
-< br / >Built with 💚 by a passionate footballer and data enthusiast.
-< br / >Feel free to reach out or contribute!
+<br/>Kostas
+<br/>Built with 💚 by a passionate footballer and data enthusiast.
+<br/>Feel free to reach out or contribute!
 
