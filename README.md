@@ -26,7 +26,8 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 - An interactive card displaying the correlation coefficient of these variables.
 
 🔧 Technologies Used
-<br/><br/>📊 Web App Framework & UI
+
+📊 Web App Framework & UI
 - Dash – Python framework for building interactive web applications
 - dash-bootstrap-components – Bootstrap integration for Dash for polished, responsive layouts
 - Plotly – For rich, interactive visualizations (charts, maps, and more)
@@ -58,7 +59,7 @@ The app is deployed on Google Cloud Platform (App Engine or Cloud Run). Make sur
 🛠️ Getting Started Locally
 To run this app locally:
 - Create a Service Account Key from Google Cloud Console and download it as a JSON file.
-- Replace the part of the script in the individual pages that is used for reading the credentials at runtime and for authenticating with the following 3 lines of code that make a reference to the downloaded JSON file:
+- Replace the part of the script in the individual pages that is used for reading the credentials at runtime and for the Secret Manager authentication with the following 3 lines of code that make a reference to the downloaded JSON file:
 
 <br/>#Set up the Google Sheets API client
 <br/>scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
