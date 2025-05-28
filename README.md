@@ -6,7 +6,7 @@ This is a multi-page interactive web application built using Dash, Plotly, and d
 https://praguedevilsfc-41916605153.europe-central2.run.app/
 
 📌 Features
-This web app includes 7 interactive pages, each designed to present and explore different aspects of the team’s history, players, and performance:
+<br/>This web app includes 7 interactive pages, each designed to present and explore different aspects of the team’s history, players, and performance:
 
 1. 🏟️ Home Page
 - A photo carousel showcasing memorable moments from each football season.
@@ -26,7 +26,7 @@ This web app includes 7 interactive pages, each designed to present and explore 
 - An interactive card displaying the correlation coefficient of these variables.
 
 🔧 Technologies Used
-📊 Web App Framework & UI
+<br/><br/>📊 Web App Framework & UI
 - Dash – Python framework for building interactive web applications
 - dash-bootstrap-components – Bootstrap integration for Dash for polished, responsive layouts
 - Plotly – For rich, interactive visualizations (charts, maps, and more)
