@@ -1,11 +1,11 @@
-⚽ Football Team Stats Tracker
+#⚽ Football Team Stats Tracker
 
 This is a multi-page interactive web application built using Dash, Plotly, and dash-bootstrap-components to track and visualize the performance and statistics of an amateur football team. The app pulls data directly from a Google Sheets file stored in Google Drive and is deployed on Google Cloud Platform (GCP).
 
-🌐 Live Demo
+#🌐 Live Demo
 https://praguedevilsfc-41916605153.europe-central2.run.app/
 
-📌 Features
+#📌 Features
 This web app includes 7 interactive pages, each designed to present and explore different aspects of the team’s history, players, and performance:
 
 1. 🏟️ Home Page
@@ -25,7 +25,7 @@ This web app includes 7 interactive pages, each designed to present and explore 
 - An interactive line chart visualizing the correlation between different performance variables.
 - An interactive card displaying the correlation coefficient of these variables.
 
-🔧 Technologies Used
+#🔧 Technologies Used
 📊 Web App Framework & UI
 - Dash – Python framework for building interactive web applications
 - dash-bootstrap-components – Bootstrap integration for Dash for polished, responsive layouts
@@ -48,23 +48,21 @@ This web app includes 7 interactive pages, each designed to present and explore 
 - The application accesses Google Sheets using a service account.
 - Credentials are stored securely in GCP Secret Manager and accessed during runtime to authenticate and pull the latest data.
 
-🚀 Deployment
+#🚀 Deployment
 The app is deployed on Google Cloud Platform (App Engine or Cloud Run). Make sure to:
 - Set up a Google Cloud project.
 - Enable the Google Sheets and Secret Manager APIs.
 - Store your service account key as a secret.
 - Retrieve the secret in your app's startup code to authenticate and fetch data.
 
-🛠️ Getting Started Locally
+#🛠️ Getting Started Locally
 To run this app locally:
 - Create a Service Account Key from Google Cloud Console and download it as a JSON file.
-- Replace the part of the script in the individual pages that is used for reading the credentials at runtime and for authenticating with the following 2 lines of code that make a reference to the downloaded JSON file:
+- Replace the part of the script in the individual pages that is used for reading the credentials at runtime and for authenticating with the following 3 lines of code that make a reference to the downloaded JSON file:
 
-# Set up the Google Sheets API client
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets",
-         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
-
-# Add the path to your 'credentials.json' file
+## Set up the Google Sheets API client
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+## Add the path to your 'credentials.json' file
 creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
 client = gspread.authorize(creds)  
 
