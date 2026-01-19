@@ -1,116 +1,140 @@
 /* Disable hover effect on rows */
 .dash-spreadsheet .dash-cell {
-    background-color: transparent !important;
+   background-color: transparent !important;
 }
-
 .dash-spreadsheet .dash-cell.focused {
-    background-color: transparent !important; border: none !important;
+   background-color: transparent !important; border: none !important;
 }
-
 .dash-table-tooltip {
-    background-color: white !important; border: 1px solid lightgray !important;
-    color: black !important;
-    text-align: center !important;
-    font-weight: bold !important;
-    font-size: 14px !important;
-    padding: 8px; /* Add some padding inside the tooltip */
-    border-radius: 4px; /* Add rounded corners for a smoother appearance */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+   background-color: white !important; border: 1px solid lightgray !important;
+   color: black !important;
+   text-align: center !important;
+   font-weight: bold !important;
+   font-size: 14px !important;
+   padding: 8px; /* Add some padding inside the tooltip */
+   border-radius: 4px; /* Add rounded corners for a smoother appearance */
+   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
 }
-
+/* Center all table cell contents */
+.dash-table-container .dash-spreadsheet-container .dash-cell-value {
+   text-align: center !important;
+   justify-content: center;
+   align-items: center;
+   display: flex;   /* needed for vertical centering */
+}
 .custom-tooltip {
-    background-color: white !important;
-    border: 1px solid lightgrey !important;
-    color: black !important;
-    font-weight: bold;
-    font-size: 14px;
-    text-align: center;
-    padding: 5px;
+   background-color: white !important;
+   border: 1px solid lightgrey !important;
+   color: black !important;
+   font-weight: bold;
+   font-size: 14px;
+   text-align: center;
+   padding: 5px;
 }
-
 .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner table {
-    --hover: transparent !important;
-  }
-
+   --hover: transparent !important;
+ }
 /* dropdown menu options */
 .Select-value-label {
-    background-color: transparent !important;
-    color: white !important;
- }
-
+   background-color: transparent !important;
+   color: white !important;
+}
 /* Ensure no blur or background effects are applied to cards */
 .card-body {
-    backdrop-filter: transparent !important;
-    filter: transparent !important;
-    background: transparent !important;
-    box-shadow: transparent !important;
-    text-align: center !important;
+   backdrop-filter: transparent !important;
+   filter: transparent !important;
+   background: transparent !important;
+   box-shadow: transparent !important;
+   text-align: center !important;
 }
-
 /* Remove blurry background from parent containers */
 .dash-bootstrap {
-    backdrop-filter: none !important;
-    filter: none !important;
-    background: none !important;
-    text-align: center !important;
+   backdrop-filter: none !important;
+   filter: none !important;
+   background: none !important;
+   text-align: center !important;
 }
-
 /* Specifically for cards */
 .card-body, .card {
-    backdrop-filter: none !important;
-    filter: none !important;
-    background: none !important;
-    box-shadow: none !important;
-    text-align: center !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+   backdrop-filter: none !important;
+   filter: none !important;
+   background: none !important;
+   box-shadow: none !important;
+   text-align: center !important;
+   font-weight: bold !important;
+   font-size: 30px !important;
+   padding: 20px !important;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   text-align: center;
 }
-
 .card-column {
-    padding-left: 5px !important;
-    padding-right: 5px !important;
+   padding-left: 5px !important;
+   padding-right: 5px !important;
+   font-weight: bold !important;
+   font-size: 30px !important;
 }
-
 /* Default sizes for larger screens */
 .carousel-caption h5 {
-    font-size: 2vw;
+   font-size: 2vw;
 }
-
 .carousel-caption p {
-    font-size: 1.5vw;
+   font-size: 1.5vw;
 }
-
 /* Medium devices (tablets, small desktops) */
 @media (max-width: 768px) {
-    .carousel-caption h5 {
-        font-size: 4vw;
-    }
-    .carousel-caption p {
-        font-size: 3vw;
-    }
+   .carousel-caption h5 {
+       font-size: 4vw;
+   }
+   .carousel-caption p {
+       font-size: 3vw;
+   }
 }
-
 /* Small devices (phones) */
 @media (max-width: 480px) {
-    .carousel-caption h5 {
-        font-size: 3.5vw; /* Decrease from 6vw */
-        line-height: 1.2;
-    }
-    .carousel-caption p {
-        font-size: 2.8vw; /* Decrease from 5vw */
-        line-height: 1.2;
-    }
+   .carousel-caption h5 {
+       font-size: 3.5vw; /* Decrease from 6vw */
+       line-height: 1.2;
+   }
+   .carousel-caption p {
+       font-size: 2.8vw; /* Decrease from 5vw */
+       line-height: 1.2;
+   }
 }
-
 /* Extra-small devices (like iPhone SE or similar) */
 @media (max-width: 400px) {
-    .carousel-caption h5 {
-        font-size: 3vw;
-    }
+   .carousel-caption h5 {
+       font-size: 3vw;
+   }
+   .carousel-caption p {
+       font-size: 2.5vw;
+   }
+}
 
-    .carousel-caption p {
-        font-size: 2.5vw;
-    }
+.player-card {
+   background-color: rgb(216, 183, 99) !important;
+}
+/* ==== STICKER TOP RIGHT POSITION ==== */
+.sticker-container {
+   position: fixed;
+   top: 0;        /* No gap from top */
+   right: 0;      /* No gap from right */
+   padding: 0;
+   margin: 0;
+   z-index: 9999;
+}
+.sticker-image {
+   width: 150px;
+   height: auto;
+   transform-origin: top right;
+   transform-style: preserve-3d;
+   transition: transform 0.35s ease, filter 0.35s ease;
+   filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.25));
+   cursor: pointer;
+   display: block;
+}
+.sticker-image:hover {
+   transform: rotateZ(-12deg) rotateX(18deg) scale(1.04);
+   filter: drop-shadow(0px 6px 12px rgba(0,0,0,0.35));
 }
