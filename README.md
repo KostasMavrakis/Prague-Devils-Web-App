@@ -6,24 +6,20 @@ This is a multi-page interactive web application built using Dash, Plotly, and d
 https://praguedevilsfc-41916605153.europe-central2.run.app/
 
 📌 Features
-<br/>This web app includes 7 interactive pages, each designed to present and explore different aspects of the team’s history, players, and performance:
+<br/>This web app includes 12 interactive pages, each designed to present and explore different aspects of the team’s history, players, and performance:
 
-1. 🏟️ Home Page
-- A photo carousel showcasing memorable moments from each football season.
-2. 📋 Player Roster
-- An interactive data table listing all players by season, with sortable and searchable fields.
-3. 🌍 Team Overview
-- A pie chart showing player distribution by country.
-- Cards summarizing general team statistics.
-4. 🗺️ Player Origins Map
-- An interactive map displaying players’ locations based on their countries of origin.
-5. 📊 Match History
-- A dynamic data table of all recorded matches with details such as score, opponent, and date.
-6. 🏅 Top Performers
-- A bar chart showcasing the top five players based on selected metrics (e.g., goals, assists, appearances).
-7. 📈 Performance Correlation
-- An interactive line chart visualizing the correlation between different performance variables.
-- An interactive card displaying the correlation coefficient of these variables.
+• Gallery: Introductory page featuring a carousel photo gallery by season
+• Overview: Nationality distribution and key team statistics
+• Roster: Interactive table listing all players by season
+• Map: Interactive map showing players’ geographic origins
+• Coaches & Captains: Data tables summarizing the results under different coaches and captains
+• All-Time Results: Complete match history in an interactive table
+• Goals: Charts visualizing goals scored and conceded per season
+• Fields: Map of pitch locations and performance breakdown per field
+• The Top: Bar charts ranking the top five players based on selectable metrics
+• Trackers: Performance metrics per player, including embedded heat-map screenshots
+• Ratings: Dynamic player valuation cards that update based on user input via an online form
+• Correlation: Interactive line chart and summary card showing correlations between performance variables
 
 🔧 Technologies Used
 
