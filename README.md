@@ -9,17 +9,17 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 <br/>This web app includes 12 interactive pages, each designed to present and explore different aspects of the team’s history, players, and performance:
 
 • Gallery: Introductory page featuring a carousel photo gallery by season
-• Overview: Nationality distribution and key team statistics
-• Roster: Interactive table listing all players by season
-• Map: Interactive map showing players’ geographic origins
-• Coaches & Captains: Data tables summarizing the results under different coaches and captains
-• All-Time Results: Complete match history in an interactive table
-• Goals: Charts visualizing goals scored and conceded per season
-• Fields: Map of pitch locations and performance breakdown per field
-• The Top: Bar charts ranking the top five players based on selectable metrics
-• Trackers: Performance metrics per player, including embedded heat-map screenshots
-• Ratings: Dynamic player valuation cards that update based on user input via an online form
-• Correlation: Interactive line chart and summary card showing correlations between performance variables
+<br/>• Overview: Nationality distribution and key team statistics
+<br/>• Roster: Interactive table listing all players by season
+<br/>• Map: Interactive map showing players’ geographic origins
+<br/>• Coaches & Captains: Data tables summarizing the results under different coaches and captains
+<br/>• All-Time Results: Complete match history in an interactive table
+<br/>• Goals: Charts visualizing goals scored and conceded per season
+<br/>• Fields: Map of pitch locations and performance breakdown per field
+<br/>• The Top: Bar charts ranking the top five players based on selectable metrics
+<br/>• Trackers: Performance metrics per player, including embedded heat-map screenshots
+<br/>• Ratings: Dynamic player valuation cards that update based on user input via an online form
+<br/>• Correlation: Interactive line chart and summary card showing correlations between performance variables
 
 🔧 Technologies Used
 
