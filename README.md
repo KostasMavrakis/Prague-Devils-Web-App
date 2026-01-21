@@ -33,10 +33,12 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 <br/>•	The Dash application (built on Flask) serves as both the backend and frontend framework.
 <br/>•	data_loader.py handles authentication, data extraction, cleansing, transformation, and caching.
 <br/>•	Processed datasets are kept in memory or cache and reused across multiple pages to optimize performance.
-<br/>4.	Visualization & User Interface – Dash + Plotly
+
+<br/>4.	Visualization & User Interface
 <br/>•	Dash components define the multi-page structure and interactivity.
 <br/>•	Plotly generates interactive charts, maps, and tables.
 <br/>•	style.css and Dash Bootstrap Components ensure a responsive and consistent UI across devices.
+
 <br/>5.	Containerization & Deployment
 <br/>•	The entire application is containerized using Docker (Dockerfile).
 <br/>•	requirements.txt defines all dependencies for reproducible builds.
