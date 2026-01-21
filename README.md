@@ -46,7 +46,7 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 
 🛠️ Running the app locally
 
-<br/>• Create a Service Account Key from Google Cloud Console and download it as a JSON file.
+• Create a Service Account Key from Google Cloud Console and download it as a JSON file.
 <br/>• Replace the part of the script in the data_loader.py file that is used for reading the credentials at runtime and for the Secret Manager authentication with the following 3 lines of code that make a reference to the downloaded JSON file:
 
 <br/>#Set up the Google Sheets API client
