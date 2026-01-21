@@ -23,23 +23,23 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 
 🔧 Technologies and Approach Used
 
-<br/>1.	Data Source – Google Sheets
+<br/>1.	Data Source (Google Sheets)
 <br/>All raw data is stored in Google Sheets. This allows easy updates without redeploying the application and acts as a lightweight data layer suitable for a small analytics platform.
 
-<br/>2.	Authentication
+2.	Authentication (Google Cloud Platform)
 <br/>Secure access to Google Sheets is handled via OAuth/service account credentials stored in Google Cloud Secret Manager. At runtime, the application retrieves these credentials securely, ensuring that no sensitive information is exposed in the codebase or configuration files.
 
-<br/>3.	Backend & Data Processing
+3.	Backend & Data Processing (Dash / Flask)
 <br/>•	The Dash application (built on Flask) serves as both the backend and frontend framework.
 <br/>•	data_loader.py handles authentication, data extraction, cleansing, transformation, and caching.
 <br/>•	Processed datasets are kept in memory or cache and reused across multiple pages to optimize performance.
 
-<br/>4.	Visualization & User Interface
+<br/>4.	Visualization & User Interface (Dash + Plotly)
 <br/>•	Dash components define the multi-page structure and interactivity.
 <br/>•	Plotly generates interactive charts, maps, and tables.
 <br/>•	style.css and Dash Bootstrap Components ensure a responsive and consistent UI across devices.
 
-<br/>5.	Containerization & Deployment
+<br/>5.	Containerization & Deployment (Docker + Google Cloud Platform)
 <br/>•	The entire application is containerized using Docker (Dockerfile).
 <br/>•	requirements.txt defines all dependencies for reproducible builds.
 <br/>•	The container is deployed on Google Cloud Platform, enabling easy scaling, portability, and consistent runtime behavior.
