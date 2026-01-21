@@ -23,10 +23,12 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 
 🔧 Technologies and Approach Used
 
-1.	Data Source – Google Sheets
+<br/>1.	Data Source – Google Sheets
 <br/>All raw data is stored in Google Sheets. This allows easy updates without redeploying the application and acts as a lightweight data layer suitable for a small analytics platform.
+
 <br/>2.	Authentication
 <br/>Secure access to Google Sheets is handled via OAuth/service account credentials stored in Google Cloud Secret Manager. At runtime, the application retrieves these credentials securely, ensuring that no sensitive information is exposed in the codebase or configuration files.
+
 <br/>3.	Backend & Data Processing
 <br/>•	The Dash application (built on Flask) serves as both the backend and frontend framework.
 <br/>•	data_loader.py handles authentication, data extraction, cleansing, transformation, and caching.
