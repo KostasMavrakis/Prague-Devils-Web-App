@@ -23,7 +23,7 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 
 🔧 Technologies and Approach Used
 
-<br/>1.	Data Source (Google Sheets)
+1.	Data Source (Google Sheets)
 <br/>All raw data is stored in Google Sheets. This allows easy updates without redeploying the application and acts as a lightweight data layer suitable for a small analytics platform.
 
 2.	Authentication (Google Cloud Platform)
@@ -34,49 +34,20 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 <br/>•	data_loader.py handles authentication, data extraction, cleansing, transformation, and caching.
 <br/>•	Processed datasets are kept in memory or cache and reused across multiple pages to optimize performance.
 
-<br/>4.	Visualization & User Interface (Dash + Plotly)
+4.	Visualization & User Interface (Dash + Plotly)
 <br/>•	Dash components define the multi-page structure and interactivity.
 <br/>•	Plotly generates interactive charts, maps, and tables.
 <br/>•	style.css and Dash Bootstrap Components ensure a responsive and consistent UI across devices.
 
-<br/>5.	Containerization & Deployment (Docker + Google Cloud Platform)
+5.	Containerization & Deployment (Docker + Google Cloud Platform)
 <br/>•	The entire application is containerized using Docker (Dockerfile).
 <br/>•	requirements.txt defines all dependencies for reproducible builds.
 <br/>•	The container is deployed on Google Cloud Platform, enabling easy scaling, portability, and consistent runtime behavior.
- 
-📊 Web App Framework & UI
-- Dash – Python framework for building interactive web applications
-- dash-bootstrap-components – Bootstrap integration for Dash for polished, responsive layouts
-- Plotly – For rich, interactive visualizations (charts, maps, and more)
-<br/>🧮 Data Handling & Analysis
-- Pandas – Powerful data manipulation and analysis
-- NumPy – Support for numerical operations
-<br/>🌐 Data Source & API Integration
-- gspread – Python library for interacting with Google Sheets
-- google-auth, google-auth-oauthlib – For secure OAuth 2.0 authentication with Google APIs
-- oauth2client, requests-oauthlib – Additional OAuth helpers for legacy and modern flows
-<br/>🔐 Security & Cloud Integration
-- google-cloud-secret-manager – Secure storage and access to credentials using GCP Secret Manager
-- cachetools, rsa, pyasn1, pyasn1-modules – Utilities for token management and secure API access
-<br/>🌐 Web Framework
-- Flask – Lightweight backend server used under the hood by Dash
-- Werkzeug, Jinja2, itsdangerous, click – Flask core dependencies for routing, templating, and secure sessions
 
-🔐 Authentication & Data Access
-- The application accesses Google Sheets using a service account.
-- Credentials are stored securely in GCP Secret Manager and accessed during runtime to authenticate and pull the latest data.
+🛠️ Running the app locally
 
-🚀 Deployment
-The app is deployed on Google Cloud Platform (App Engine or Cloud Run). Make sure to:
-- Set up a Google Cloud project.
-- Enable the Google Sheets and Secret Manager APIs.
-- Store your service account key as a secret.
-- Retrieve the secret in your app's startup code to authenticate and fetch data.
-
-🛠️ Getting Started Locally
-To run this app locally:
-- Create a Service Account Key from Google Cloud Console and download it as a JSON file.
-- Replace the part of the script in the individual pages that is used for reading the credentials at runtime and for the Secret Manager authentication with the following 3 lines of code that make a reference to the downloaded JSON file:
+<br/>• Create a Service Account Key from Google Cloud Console and download it as a JSON file.
+<br/>• Replace the part of the script in the data_loader.py file that is used for reading the credentials at runtime and for the Secret Manager authentication with the following 3 lines of code that make a reference to the downloaded JSON file:
 
 <br/>#Set up the Google Sheets API client
 <br/>scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
