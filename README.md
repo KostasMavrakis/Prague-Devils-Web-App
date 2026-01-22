@@ -49,11 +49,6 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 • Create a Service Account Key from Google Cloud Console and download it as a JSON file.
 <br/>• Replace the part of the script in the data_loader.py file that is used for reading the credentials at runtime and for the Secret Manager authentication with the following lines of code that make a reference to the downloaded JSON file:
 
-<br/>#Set up the Google Sheets API client
-<br/>scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
-<br/>#Add the path to your 'credentials.json' file
-<br/>creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
-<br/>client = gspread.authorize(creds)  
 import pandas as pd
 <br/>import json
 <br/>import gspread
@@ -63,25 +58,27 @@ import pandas as pd
 <br/># Setup diskcache (shared cache folder with app.py)
 <br/>cache = Cache("./cache")
 
+<br/>#Set up the Google Sheets API client
 <br/># Google Sheets config
-<br/>SCOPES = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive",]
+<br/>SCOPES = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive",]
+<br/>#Add the path to your 'credentials.json' file
 <br/>CREDENTIALS_FILE = "credentials.json"
-<br/>SHEET_NAME = "Prague Devils 2018-2024"
+<br/>SHEET_NAME = "sheet_name"
 
 <br/># ========= Client helpers =========
 <br/>@cache.memoize(expire=3600)
 <br/>def get_creds():
-"""Load service account credentials from local JSON file."""
-  with open(CREDENTIALS_FILE, "r") as f:
-  creds_info = json.load(f)
-  return Credentials.from_service_account_info(
-  creds_info, scopes=SCOPES
-  )
+<br/>"""Load service account credentials from local JSON file."""
+  <br/>with open(CREDENTIALS_FILE, "r") as f:
+  <br/>creds_info = json.load(f)
+  <br/>return Credentials.from_service_account_info(
+  <br/>creds_info, scopes=SCOPES
+  <br/>)
 
 <br/>def get_client():
-"""Return a new gspread client."""
-  creds = get_creds()
-return gspread.authorize(creds)
+<br/>"""Return a new gspread client."""
+  <br/>creds = get_creds()
+<br/>return gspread.authorize(creds)
  
 🧑‍💻 Author
 <br/>Kostas
