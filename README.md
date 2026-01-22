@@ -8,7 +8,7 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 📌 Features
 <br/>The web app includes 12 interactive pages, each designed to present and explore different aspects of the team’s history, players, and performance:
 
-<br/>• Gallery: Introductory page featuring a carousel photo gallery by season
+• Gallery: Introductory page featuring a carousel photo gallery by season
 <br/>• Overview: Nationality distribution and key team statistics
 <br/>• Roster: Interactive table listing all players by season
 <br/>• Map: Interactive map showing players’ geographic origins
@@ -46,7 +46,7 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 
 🛠️ Running the app locally
 
-<br/>• Create a Service Account Key from Google Cloud Console and download it as a JSON file.
+• Create a Service Account Key from Google Cloud Console and download it as a JSON file.
 <br/>• Link the web app pages with the data_loader_local.py file instead, which makes a reference to the downloaded JSON file and performs the authentication using the local Google service account key instead of the Google Cloud Secret Manager.
 
 🧑‍💻 Author
