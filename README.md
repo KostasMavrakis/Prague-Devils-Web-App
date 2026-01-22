@@ -6,7 +6,7 @@ This is a multi-page interactive web application built using Dash, Plotly, and d
 https://praguedevilsfc-41916605153.europe-central2.run.app/
 
 📌 Features
-<br/>This web app includes 12 interactive pages, each designed to present and explore different aspects of the team’s history, players, and performance:
+<br/>The web app includes 12 interactive pages, each designed to present and explore different aspects of the team’s history, players, and performance:
 
 • Gallery: Introductory page featuring a carousel photo gallery by season
 <br/>• Overview: Nationality distribution and key team statistics
@@ -47,39 +47,8 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 🛠️ Running the app locally
 
 • Create a Service Account Key from Google Cloud Console and download it as a JSON file.
-<br/>• Replace the part of the script in the data_loader.py file that is used for reading the credentials at runtime and for the Secret Manager authentication with the following lines of code that make a reference to the downloaded JSON file:
+<br/>• Link the web app pages with the data_loader_local.py file instead, which makes a reference to the downloaded JSON file and performs the authentication using the local Google service account key instead of the Google Cloud Secret Manager.
 
-import pandas as pd
-<br/>import json
-<br/>import gspread
-<br/>from google.oauth2.service_account import Credentials
-<br/>from diskcache import Cache
-
-<br/># Setup diskcache (shared cache folder with app.py)
-<br/>cache = Cache("./cache")
-
-<br/>#Set up the Google Sheets API client
-<br/># Google Sheets config
-<br/>SCOPES = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive",]
-<br/>#Add the path to your 'credentials.json' file
-<br/>CREDENTIALS_FILE = "credentials.json"
-<br/>SHEET_NAME = "sheet_name"
-
-<br/># ========= Client helpers =========
-<br/>@cache.memoize(expire=3600)
-<br/>def get_creds():
-<br/>"""Load service account credentials from local JSON file."""
-  <br/>with open(CREDENTIALS_FILE, "r") as f:
-  <br/>creds_info = json.load(f)
-  <br/>return Credentials.from_service_account_info(
-  <br/>creds_info, scopes=SCOPES
-  <br/>)
-
-<br/>def get_client():
-<br/>"""Return a new gspread client."""
-  <br/>creds = get_creds()
-<br/>return gspread.authorize(creds)
- 
 🧑‍💻 Author
 <br/>Kostas
 <br/>Built with 💚 by a passionate footballer and data enthusiast.
