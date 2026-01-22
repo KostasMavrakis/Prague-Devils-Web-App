@@ -47,14 +47,42 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 🛠️ Running the app locally
 
 • Create a Service Account Key from Google Cloud Console and download it as a JSON file.
-<br/>• Replace the part of the script in the data_loader.py file that is used for reading the credentials at runtime and for the Secret Manager authentication with the following 3 lines of code that make a reference to the downloaded JSON file:
+<br/>• Replace the part of the script in the data_loader.py file that is used for reading the credentials at runtime and for the Secret Manager authentication with the following lines of code that make a reference to the downloaded JSON file:
 
 <br/>#Set up the Google Sheets API client
 <br/>scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
 <br/>#Add the path to your 'credentials.json' file
 <br/>creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
 <br/>client = gspread.authorize(creds)  
+import pandas as pd
+<br/>import json
+<br/>import gspread
+<br/>from google.oauth2.service_account import Credentials
+<br/>from diskcache import Cache
 
+<br/># Setup diskcache (shared cache folder with app.py)
+<br/>cache = Cache("./cache")
+
+<br/># Google Sheets config
+<br/>SCOPES = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive",]
+<br/>CREDENTIALS_FILE = "credentials.json"
+<br/>SHEET_NAME = "Prague Devils 2018-2024"
+
+<br/># ========= Client helpers =========
+<br/>@cache.memoize(expire=3600)
+<br/>def get_creds():
+"""Load service account credentials from local JSON file."""
+  with open(CREDENTIALS_FILE, "r") as f:
+  creds_info = json.load(f)
+  return Credentials.from_service_account_info(
+  creds_info, scopes=SCOPES
+  )
+
+<br/>def get_client():
+"""Return a new gspread client."""
+  creds = get_creds()
+return gspread.authorize(creds)
+ 
 🧑‍💻 Author
 <br/>Kostas
 <br/>Built with 💚 by a passionate footballer and data enthusiast.
