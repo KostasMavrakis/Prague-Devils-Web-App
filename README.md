@@ -47,7 +47,7 @@ https://praguedevilsfc-41916605153.europe-central2.run.app/
 🛠️ Running the app locally
 
 • Create a Service Account Key from Google Cloud Console and download it as a JSON file.
-<br/>• Link the web app pages with the data_loader_local.py file instead, which makes a reference to the downloaded JSON file and performs the authentication using the local Google service account key instead of the Google Cloud Secret Manager.
+• Link the web app pages with the data_loader_local.py file instead, which makes a reference to the downloaded JSON file and performs the authentication using the local Google service account key instead of the Google Cloud Secret Manager.
 
 🧑‍💻 Author
 <br/>Kostas
