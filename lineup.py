@@ -1,390 +1,198 @@
-import dash
-from dash import html, dcc, ALL, ctx, Input, Output, State
-import dash_bootstrap_components as dbc
-from data_loader import load_all_players
-# Initialize the Dash app
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SOLAR, '/assets/lineup.css'], suppress_callback_exceptions=True, meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
-df = load_all_players()
-# --------------------------------------------------
-# FORMATIONS
-# --------------------------------------------------
-FORMATIONS = {
-   "4-3-3": [
-       ("GK", 5, 50),
-       ("LB", 20, 10), ("CB", 14, 35),
-       ("CB", 14, 65), ("RB", 20, 90),
-       ("CM", 53, 30), ("CM", 39.5, 50), ("CM", 53, 70),
-       ("LW", 68, 10), ("ST", 77, 50), ("RW", 68, 90),
-   ],
-   "4-4-2": [
-       ("GK", 5, 50),
-       ("LB", 20, 10), ("CB", 14, 35),
-       ("CB", 14, 65), ("RB", 20, 90),
-       ("LM", 62, 10), ("CM", 39.5, 35),
-       ("CM", 39.5, 65), ("RM", 62, 90),
-       ("ST", 77, 65), ("ST", 77, 35),
-   ],
-   "4-4-2 (Diamond)": [
-       ("GK", 5, 50),
-       ("LB", 20, 10), ("CB", 14, 35),
-       ("CB", 14, 65), ("RB", 20, 90),
-       ("CDM", 39.5, 50),
-       ("LCM", 53, 30), ("RCM", 53, 70),
-       ("CAM", 62, 50),
-       ("ST", 77, 35), ("ST", 77, 65),
-   ],
-   "4-4-1-1": [
-       ("GK", 5, 50),
-       ("LB", 20, 10), ("CB", 14, 35),
-       ("CB", 14, 65), ("RB", 20, 90),
-       ("LM", 62, 10), ("LCM", 39.5, 35),
-       ("RCM", 39.5, 65), ("RM", 62, 90),
-       ("CF", 68, 50),
-       ("ST", 77, 50),
-   ],
-   "4-3-2-1": [
-       ("GK", 5, 50),
-       ("LB", 20, 10), ("CB", 14, 35),
-       ("CB", 14, 65), ("RB", 20, 90),
-       ("LCM", 53, 30), ("CM", 39.5, 50),
-       ("RCM", 53, 70),
-       ("LAM", 68, 35), ("RAM", 68, 65),
-       ("ST", 77, 50),
-   ],
-   "4-2-3-1": [
-       ("GK", 5, 50),
-       ("LB", 20, 10), ("CB", 14, 35),
-       ("CB", 14, 65), ("RB", 20, 90),
-       ("CDM", 39.5, 35), ("CDM", 39.5, 65),
-       ("LW", 62, 10), ("CAM", 62, 50), ("RW", 62, 90),
-       ("ST", 77, 50),
-   ],
-   "4-5-1": [
-       ("GK", 5, 50),
-       ("LB", 20, 10), ("CB", 14, 35),
-       ("CB", 14, 65), ("RB", 20, 90),
-       ("LM", 62, 10),
-       ("LCM", 53, 35), ("CM", 39.5, 50), ("RCM", 53, 65),
-       ("RM", 62, 90),
-       ("ST", 77, 50),
-   ],
-   "3-4-3": [
-       ("GK", 5, 50),
-       ("LCB", 14, 25), ("CB", 14, 50), ("RCB", 14, 75),
-       ("LM", 53, 10), ("LCM", 39.5, 35),
-       ("RCM", 39.5, 65), ("RM", 53, 90),
-       ("LW", 68, 10), ("ST", 77, 50), ("RW", 68, 90),
-   ],
-   "3-5-2": [
-       ("GK", 5, 50),
-       ("LCB", 14, 25), ("CB", 14, 50), ("RCB", 14, 75),
-       ("LM", 62, 10),
-       ("LCM", 53, 35), ("CM", 39.5, 50), ("RCM", 53, 65),
-       ("RM", 62, 90),
-       ("ST", 77, 35), ("ST", 77, 65),
-   ],
-   "3-6-1": [
-       ("GK", 5, 50),
-       ("LCB", 14, 25), ("CB", 14, 50), ("RCB", 14, 75),
-       ("LM", 62, 10),
-       ("LCM", 53, 30), ("CM", 39.5, 50), ("RCM", 53, 70),
-       ("RM", 62, 90),
-       ("CAM", 68, 50),
-       ("ST", 77, 50),
-   ],
-   "5-3-2": [
-       ("GK", 5, 50),
-       ("LWB", 28, 10),
-       ("LCB", 14, 30), ("CB", 14, 50), ("RCB", 14, 70),
-       ("RWB", 28, 90),
-       ("LCM", 53, 30), ("CM", 39.5, 50), ("RCM", 53, 70),
-       ("ST", 77, 35), ("ST", 77, 65),
-   ],
-   "5-4-1": [
-       ("GK", 5, 50),
-       ("LWB", 28, 10),
-       ("LCB", 14, 30), ("CB", 14, 50), ("RCB", 14, 70),
-       ("RWB", 28, 90),
-       ("LM", 62, 10), ("LCM", 39.5, 35),
-       ("RCM", 39.5, 65), ("RM", 62, 90),
-       ("ST", 77, 50),
-   ],
+/* TABLE */
+.player-table th,
+.player-table td {
+   text-align: center !important;
+   vertical-align: middle !important;
 }
-# --------------------------------------------------
-# LAYOUT
-# --------------------------------------------------
-app.layout = dbc.Container(
-   [
-       dcc.Store(id="captain-store"),
-       dbc.Row(
-           [
-               dbc.Col(
-                   dcc.Dropdown(
-                       id="formation-dropdown",
-                       options=[{'label': formation, 'value': formation} for formation in FORMATIONS],
-                       #options=[{"label": k, "value": k} for k in FORMATIONS],
-                       value="4-3-3",
-                       placeholder="Formation",
-                       multi=False,
-                       clearable=False,
-                       style={
-                           "background-color": "transparent",
-                           "color": "black",
-                           "font-weight": "bold",
-                           "width": "75%",
-                           },
-                   ),
-                   xs=12,
-                   sm=12,
-                   md=3,
-                   lg=3,
-                   xl=3,
-               ),
-               dbc.Col(
-                   dcc.Dropdown(
-                       id="season-dropdown",
-                       options=[{'label': season, 'value': season} for season in df['Season'].unique()],
-                       value="2025 - 2026",
-                       placeholder="Season",
-                       multi=False,
-                       style={
-                           "background-color": "transparent",
-                           "color": "black",
-                           "font-weight": "bold",
-                           "width": "75%",
-                           },
-                   ),
-                   xs=12,
-                   sm=12,
-                   md=3,
-                   lg=3,
-                   xl=3,
-               ),
-               dbc.Col(
-                   dcc.Dropdown(
-                       id="position-dropdown",
-                       options=[{'label': position, 'value': position} for position in df['Field Position'].unique()],
-                       placeholder="Position",
-                       multi=True,
-                       style={
-                           "background-color": "transparent",
-                           "color": "black",
-                           "font-weight": "bold",
-                           "width": "75%",
-                           },
-                   ),
-                   xs=12,
-                   sm=12,
-                   md=3,
-                   lg=3,
-                   xl=3,
-               ),
-               dbc.Col(
-                   dcc.Dropdown(
-                       id="country-dropdown",
-                       options=[{'label': country, 'value': country} for country in df['Country of Origin'].unique()],
-                       placeholder="Country",
-                       multi=True,
-                       style={
-                           "background-color": "transparent",
-                           "color": "black",
-                           "font-weight": "bold",
-                           "width": "75%",
-                           },
-                   ),
-                   xs=12,
-                   sm=12,
-                   md=3,
-                   lg=3,
-                   xl=3,
-               ),
-               dbc.Col(
-                   dcc.Dropdown(
-                       id="player-dropdown",
-                       options=[{'label': player, 'value': player} for player in df['Player Name'].unique()],
-                       placeholder="Player",
-                       multi=True,
-                       style={
-                           "background-color": "transparent",
-                           "color": "black",
-                           "font-weight": "bold",
-                           "width": "75%",
-                           },
-                   ),
-                   xs=12,
-                   sm=12,
-                   md=3,
-                   lg=3,
-                   xl=3,
-               ),
-               dbc.Col(
-                   html.Button("Export PNG", id="export-btn"),
-                   xs=12,
-                   sm=12,
-                   md=3,
-                   lg=3,
-                   xl=3,
-               ),
-           ],
-           className="mb-4",
-       ),
-       dbc.Row(
-           [
-               dbc.Col(
-                   html.Div(id="pitch", className="pitch-container"),
-                   md=8,
-               ),
-               dbc.Col(
-                   html.Div(id="player-table"),
-                   md=4,
-               ),
-           ]
-       ),
-   ],
-   fluid=True,
-)
-# ==========================================================
-# UPDATE TABLE + CAPTAIN OPTIONS
-# ==========================================================
-@app.callback(
-   Output("player-table", "children"),
-   Output("captain-store", "data"),
-   Input("season-dropdown", "value"),
-   Input("position-dropdown", "value"),
-   Input("country-dropdown", "value"),
-   Input("player-dropdown", "value"),
-   Input({"type": "captain-toggle", "player": ALL}, "n_clicks"),
-   State("captain-store", "data"),
-)
-def update_cards(selected_season, selected_positions, selected_counry, selected_players, star_clicks, current_captain):
-   # start from dataframe copy
-   dff = df.copy()
-   # Apply season filter (multi)
-   if selected_season:
-       if isinstance(selected_season, str):
-           selected_season = [selected_season]
-       dff = dff[dff["Season"].isin(selected_season)]
-   # Apply position filter (multi)
-   if selected_positions:
-       if isinstance(selected_positions, str):
-           selected_positions = [selected_positions]
-       dff = dff[dff["Field Position"].isin(selected_positions)]
-   # Apply position filter (multi)
-   if selected_counry:
-       if isinstance(selected_counry, str):
-           selected_counry = [selected_counry]
-       dff = dff[dff["Country of Origin"].isin(selected_counry)]    
-   # Apply player filter (multi)
-   if selected_players:
-       if isinstance(selected_players, str):
-           selected_players = [selected_players]
-       dff = dff[dff["Player Name"].isin(selected_players)]
-   triggered = ctx.triggered_id
-   # Default: keep existing captain
-   captain = current_captain
-   # Only update captain if star clicked
-   if isinstance(triggered, dict):
-       clicked = triggered["player"]
-       captain = None if clicked == current_captain else clicked
-# -------------------------
-# Build table using captain
-# -------------------------
-   # HEADER
-   table_header = html.Thead(
-       html.Tr([
-           html.Th("Captain", className="table-header", style={"width": "40px"}),
-           html.Th("Player", className="table-header"),
-           html.Th("Position", className="table-header"),
-           html.Th("Country", className="table-header"),
-           ]))        
-   # BODY
-   rows = []
-   for _, row in dff.iterrows():
-       is_captain = row["Player Name"] == captain  # ← from State
-       rows.append(
-   html.Tr(
-       [
-           # Captain Selection
-           html.Td(
-               html.Span(
-                   "★" if is_captain else "☆",
-                   id={
-                       "type": "captain-toggle",
-                       "player": row["Player Name"]
-                   },
-                   n_clicks=0,
-                   className="star",
-                   style={"textAlign": "center"},
-               ),
-           ),
-           # Player Name
-           html.Td(
-               row["Player Name"],
-               draggable="true",
-               className="draggable-player",
-               **{"data-player": row["Player Name"], "data-player-row": row["Player Name"]},
-               style={"textAlign": "center"},
-           ),
-           # Position
-           html.Td(
-               row["Abbreviation"],
-               style={"textAlign": "center"}
-           ),
-           # FLAG IMAGE
-           html.Td(
-               html.Img(
-                   src=row["Flag"],
-                   className="flag"
-               ),
-               style={"textAlign": "center"},
-           ),
-       ],
-       className="captain-row" if is_captain else "",
-   )
-)
-   table_body = html.Tbody(rows)    
-   table = dbc.Table(
-           [table_header, table_body],
-           bordered=True,
-           hover=True,
-           responsive=True,
-           striped=True,
-           size="sm",
-           className="player-table"
-           )    
-   return table, captain        
-# ==========================================================
-# UPDATE PITCH WHEN FORMATION CHANGES
-# ==========================================================
-@app.callback(
-   Output("pitch", "children"),
-   Input("formation-dropdown", "value"),
-)
-def update_pitch(formation):
-   positions = FORMATIONS[formation]
-   return html.Div(
-       className="pitch",
-       children=[
-           html.Div(
-               className="positions-layer",
-               children=[
-                   html.Div(
-                       pos,
-                       className="position-slot",
-                       **{
-                           "data-position": pos,
-                           "data-original": pos
-                           },
-                       style={
-                           "left": f"{x}%",
-                           "top": f"{y}%"
-                       },
-                   )
-                   for pos, x, y in positions
-               ]
-           )
-       ]
-   )
-# Run the app
-if __name__ == '__main__':
-   app.run(debug=True)
+.flag {
+   width: 28px;
+   height: 18px;
+   object-fit: cover;
+   border-radius: 3px;
+   box-shadow: 0 0 3px rgba(0,0,0,0.3);
+}
+.star {
+   cursor: pointer;
+   font-size: 18px;
+}
+.captain-row {
+   background-color: rgba(255, 215, 0, 0.25) !important;
+   font-weight: bold;
+}
+
+/* FADE */
+.player-unavailable {
+   opacity: 0.35 !important;
+   filter: grayscale(80%);
+   transition: 0.2s ease;
+}
+
+/* PITCH */
+.pitch {
+   position: relative;
+   width: 100%;
+   height: 650px;
+   z-index: 1;
+   overflow: hidden;
+   aspect-ratio: 16 / 9; /* maintains proper proportions */
+   background-image: url("/assets/pitch.png");
+   background-size: 100% 100%;
+   background-position: center;
+   background-repeat: no-repeat;
+}
+
+.pitch-bg {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   z-index: 0;
+}
+
+.positions-layer {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   z-index: 2;
+}
+
+/* PLAYER SLOT */
+.position-slot {
+   position: absolute;
+   transform: translate(-50%, -50%);
+   width: 90px;
+   height: 90px;
+   border-radius: 50%;
+   text-align: center;
+   line-height: 65px;
+   font-weight: bold;
+   cursor: pointer;
+   z-index: 10;
+}
+
+.jersey-img {
+   width: 100%;
+}
+.position-label {
+   position: absolute;
+   top: 1px;
+   width: 100%;
+   font-size: 14px;
+   color: white;
+}
+
+.player-name {
+   position: absolute;
+   bottom: -18px;
+   width: 100%;
+   font-size: 15px;
+   color: white;
+   z-index: 2;
+   pointer-events: none;
+}
+/* CAPTAIN */
+.position-slot.captain .jersey-img {
+   filter: drop-shadow(0 0 6px gold);
+}
+.captain-badge {
+   position: absolute;
+   top: -6px;
+   right: -6px;
+   width: 22px;
+   height: 22px;
+   color: black;
+   font-weight: bold;
+   border-radius: 50%;
+   font-size: 12px;
+   line-height: 22px;
+}
+
+.jersey {
+   width: 90px;
+   height: 90px;
+}
+
+.player-label {
+   font-size: 15px;
+   margin-top: -75px;
+   width: 100%;
+   will-change: transform;
+   transform: translateZ(0);
+   text-align: center;
+   color: white;
+}
+
+.position-slot {
+   cursor: grab;
+}
+
+.position-slot:active {
+   cursor: grabbing;
+}
+
+/* SCROLLABLE TABLE CONTAINER */
+.table-container {
+   max-height: 500px;   /* adjust based on your layout */
+   overflow-y: auto;
+   position: relative;
+   border: 1px solid rgba(0,0,0,0.1);
+}
+/* STICKY HEADER */
+.player-table thead th {
+   position: sticky;
+   top: 0;
+   z-index: 5;
+}
+/* Prevent row overlap */
+.player-table {
+   border-collapse: separate;
+   border-spacing: 0;
+}
+
+/* SVG overlay */
+.connections-layer {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   pointer-events: none; /* allows clicks to pass through */
+   z-index: 2;
+}
+/* Lines */
+.connection-line {
+   stroke: #ffffff;
+   stroke-width: 3;
+   opacity: 0.8;
+   pointer-events: auto;
+   cursor: pointer;
+}
+/* Optional glow */
+.connection-line {
+   filter: drop-shadow(0 0 4px #00d4ff);
+}
+/* When drawing mode active */
+.drawing-mode .position-slot {
+   cursor: crosshair;
+}
+
+.selected-line {
+   outline: 3px dashed white;
+   box-shadow: 0 0 10px white;
+}
+
+#lines-layer {
+   pointer-events: none;
+   z-index: 5;
+}
+
+.free-draw-active {
+   cursor: crosshair;
+}
+
+.ball {
+   position: absolute;
+   pointer-events: auto;
+   width: 28px;
+   height: 28px;
+   cursor: grab;
+   z-index: 10;
+}
