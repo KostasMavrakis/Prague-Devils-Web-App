@@ -246,10 +246,10 @@ tr.player-unavailable {
 }
 @media (max-width:768px) {
   .player-label {
-  bottom:-12px !important;
+  bottom:-15px !important;
 }
 .position-label {
-  bottom:-10px !important;
+  bottom:-15px !important;
 }
 }@media (max-width:768px) {
   .position-slot,.opponent-slot {
@@ -597,4 +597,30 @@ tr.captain-row,tr.captain-row td,tr.captain-row span {
 .Select-menu,
 .Select__menu {
   z-index: 99999 !important;
+}
+
+/* MOBILE DRAG/TOUCH LAYER */
+.drawer-handle {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:10px 0 12px;
+  cursor:pointer;
+  user-select:none;
+  touch-action:manipulation;
+}
+.drawer-grip {
+  width:28px;
+  height:4px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.7);
+}
+@media (max-width:768px) {
+  .player-table, .player-table * {
+    touch-action: none;
+  }
+  .ball, .opponent-slot, .position-slot {
+    touch-action: none;
+  }
 }
