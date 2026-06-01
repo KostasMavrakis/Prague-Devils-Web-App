@@ -67,17 +67,17 @@ const FORMATIONS = {
        ["CAM", 62, 50],
        ["CF", 77, 50],
    ],
-   "4-3-2-1": [
+   "4-3-2-1 (X-mas Tree)": [
        ["GK", 5, 50],
        ["LB", 20, 10], 
        ["CB", 14, 35],
        ["CB", 14, 65], 
        ["RB", 20, 90],
-       ["LCM", 53, 30], 
+       ["LCM", 48, 25], 
        ["CDM", 39.5, 50],
-       ["RCM", 53, 70],
-       ["LAM", 68, 35], 
-       ["RAM", 68, 65],
+       ["RCM", 48, 75],
+       ["LAM", 62, 35], 
+       ["RAM", 62, 65],
        ["CF", 77, 50],
    ],
    "4-2-3-1": [
@@ -238,7 +238,7 @@ const MOBILE_FORMATIONS = {
         ["CAM", 49, 42],
         ["CF", 68, 42]
     ],
-    "4-3-2-1": [
+    "4-3-2-1 (X-mas Tree)": [
         ["GK", 13, 42],
         ["LB", 30, 4],
         ["CB", 22, 25],
@@ -1017,6 +1017,51 @@ function resetCaptainStars() {
 // =====================================
 // DRAG START
 // =====================================
+// =====================================
+// DRAG / TOUCH COMPATIBILITY HELPERS
+// =====================================
+function getDragPayloadFromEventTarget(target) {
+    const row = target.closest?.(".draggable-player");
+    if (row) {
+        return {
+            kind: "player",
+            playerName: row.dataset.player || row.getAttribute("data-player") || "",
+            flagUrl: row.dataset.flag || row.getAttribute("data-flag") || ""
+        };
+    }
+
+    const ball = target.closest?.(".ball");
+    if (ball) return { kind: "ball", el: ball };
+
+    const opponent = target.closest?.(".opponent-slot");
+    if (opponent) return { kind: "opponent", el: opponent };
+
+    const slot = target.closest?.(".position-slot");
+    if (slot) return { kind: "slot", el: slot, playerName: slot.dataset.player || "" };
+
+    return null;
+}
+
+function placeBallAtEvent(ballEl, e) {
+    const coords = getPitchCoordsFromEvent(e);
+    if (!coords) return;
+    ballEl.style.left = `${coords.xPct}%`;
+    ballEl.style.top = `${coords.yPct}%`;
+    ballEl.style.marginLeft = "0";
+    ballEl.style.marginTop = "0";
+}
+
+function placeOpponentAtEvent(opponentEl, e) {
+    const coords = getPitchCoordsFromEvent(e);
+    if (!coords) return;
+    opponentEl.style.left = `${coords.xPct}%`;
+    opponentEl.style.top = `${coords.yPct}%`;
+}
+
+function isMobileLikeInteraction(e) {
+    return e.pointerType === "touch" || e.pointerType === "pen" || e.pointerType === "mouse" && IS_MOBILE_VIEWPORT;
+}
+
 document.addEventListener("dragstart", (e) => {
  const slot = e.target.closest(".position-slot");
  const ball = e.target.closest(".ball");
@@ -1817,13 +1862,9 @@ function renderPlayerInSlot(slot, player) {
     
     if (showFlags && flagUrl) {
 
-    const flag =
-        document.createElement("img");
-
-    flag.src = flagUrl;
-
+    const flag = document.createElement("img");
     flag.className = "player-flag";
-
+    flag.src = `/flag-proxy?url=${encodeURIComponent(flagUrl)}`;
     slot.appendChild(flag);
 }
 
