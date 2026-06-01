@@ -2,8 +2,11 @@ import dash
 from dash import html, dcc, ALL, ctx, Input, Output, State
 import dash_bootstrap_components as dbc
 import dash_svg as svg
+import requests
 import flask
+from flask import request, Response, abort
 from data_loader import load_all_players
+
 
 # Initialize the Dash app
 app = dash.Dash(__name__, external_scripts=["https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"], external_stylesheets=[dbc.themes.SOLAR, '/assets/lineup.css'], suppress_callback_exceptions=True, meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
@@ -53,13 +56,13 @@ FORMATIONS = {
        ("CAM", 62, 50),
        ("CF", 77, 50),
    ],
-   "4-3-2-1": [
+   "4-3-2-1 (X-mas Tree)": [
        ("GK", 5, 50),
        ("LB", 20, 10), ("CB", 14, 35),
        ("CB", 14, 65), ("RB", 20, 90),
-       ("LCM", 53, 30), ("CDM", 39.5, 50),
-       ("RCM", 53, 70),
-       ("LAM", 68, 35), ("RAM", 68, 65),
+       ("LCM", 48, 25), ("CDM", 39.5, 50),
+       ("RCM", 48, 75),
+       ("LAM", 62, 35), ("RAM", 62, 65),
        ("CF", 77, 50),
    ],
    "4-2-3-1": [
@@ -188,7 +191,7 @@ MOBILE_FORMATIONS = {
         ("CAM", 38, 42),
         ("CF", 57, 42),
     ],
-    "4-3-2-1": [
+    "4-3-2-1 (X-mas Tree)": [
         ("GK", 3, 42),
         ("LB", 18, 4),
         ("CB", 10, 25),
@@ -336,7 +339,7 @@ app.layout = dbc.Container(
                    dcc.Dropdown(
                        id="formation-dropdown",
                        options=[{'label': formation, 'value': formation} for formation in FORMATIONS],
-                       value="4-3-3 (Single Pivot)",
+                       value="4-3-3 (Double Pivot)",
                        placeholder="Formation",
                        multi=False,
                        clearable=False,
@@ -344,7 +347,7 @@ app.layout = dbc.Container(
                            "background-color": "transparent",
                            "color": "black",
                            "font-weight": "bold",
-                           "width": "75%",
+                           "width": "180px",
                            },
                    ),
                    xs=12,
@@ -365,7 +368,7 @@ app.layout = dbc.Container(
                            "background-color": "transparent",
                            "color": "black",
                            "font-weight": "bold",
-                           "width": "75%",
+                           "width": "180px",
                            },
                    ),
                    xs=12,
@@ -384,7 +387,7 @@ app.layout = dbc.Container(
                            "background-color": "transparent",
                            "color": "black",
                            "font-weight": "bold",
-                           "width": "75%",
+                           "width": "180px",
                            },
                    ),
                    xs=12,
@@ -403,7 +406,7 @@ app.layout = dbc.Container(
                            "background-color": "transparent",
                            "color": "black",
                            "font-weight": "bold",
-                           "width": "75%",
+                           "width": "180px",
                            },
                    ),
                    xs=12,
@@ -422,7 +425,7 @@ app.layout = dbc.Container(
                            "background-color": "transparent",
                            "color": "black",
                            "font-weight": "bold",
-                           "width": "75%",
+                           "width": "180px",
                            },
                    ),
                    xs=12,
@@ -535,49 +538,48 @@ app.layout = dbc.Container(
 # Tooltips
 # --------------------------------------------------
                 dbc.Tooltip(
-                    "Toggle jersey colors between green and white. "
-                    "Green icon = active green jerseys.",
+                    "Toggle jersey colors between green and white. ",
                     target="jersey-toggle-btn",
                     placement="bottom",
                     ),
                 dbc.Tooltip(
                     "Activate tactical connection mode. "
                     "Click two players to draw a passing connection. "
-                    "Green icon = active.",
+                    "When the icon is green the mode is active.",
                     target="draw-lines-btn",
                     placement="bottom",
                     ),
                 dbc.Tooltip(
                     "Activate free drawing mode to sketch tactical ideas on the pitch. "
-                    "Green icon = active.",
+                    "When the icon is green the mode is active. Click on the drawn sketch to remove it.",
                     target="free-draw-btn",
                     placement="bottom",
                     ),
                 dbc.Tooltip(
-                    "Add a draggable ball to the pitch.",
+                    "Add a draggable ball to the pitch. Click on the ball to remove it.",
                     target="add-ball-btn",
                     placement="bottom",
                     ),
                 dbc.Tooltip(
                     "Show or hide country flags above player jerseys. "
-                    "Green icon = flags visible.",
+                    "When the icon is green the flags are visible.",
                     target="flag-toggle-btn",
                     placement="bottom",
                     ),
                 dbc.Tooltip(
-                    "Reset the entire board: players, captain, drawings, "
-                    "connections, flags, ball and opponents.",
+                    "Reset the entire board: assigned players, captain, drawings, "
+                    "line connections, flags, ball and opponents.",
                     target="reset-btn",
                     placement="bottom",
                     ),
                 dbc.Tooltip(
-                    "Export the current tactical board as an image.",
+                    "Export the current tactical board as a png image.",
                     target="export-btn",
                     placement="bottom",
                     ),
                 dbc.Tooltip(
                     "Show or hide opponent formation overlay. "
-                    "Green icon = opponents visible.",
+                    "When the icon is green the opponents are visible.",
                     target="opponent-toggle-btn",
                     placement="bottom",
                     ),
@@ -604,8 +606,9 @@ app.layout = dbc.Container(
                     className="open",
                     children=[
                 html.Div(
-                    "Players",
-                    id="drawer-handle"
+                    className="drawer-handle",
+                    id="drawer-handle",
+                    children=[html.Span(className="drawer-grip"), html.Span(className="drawer-grip"), html.Span(className="drawer-grip")]
                     ),
                 html.Div(
                     id="player-table"
@@ -774,7 +777,23 @@ def update_cards(selected_season, selected_positions, selected_counry, selected_
            className="player-table"
            )    
    
-   return html.Div(table, className="table-container"), captain       
+   return html.Div(table, className="table-container"), captain 
+# ==========================================================
+# CREATE PROXY ENDPOINT TO DOWNLOAD THE WEB IMAGES
+# ==========================================================
+@app.server.route("/flag-proxy")
+def flag_proxy():
+    url = request.args.get("url")
+    if not url:
+        abort(400, "Missing url parameter")
+
+    try:
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+        content_type = resp.headers.get("Content-Type", "image/png")
+        return Response(resp.content, content_type=content_type)
+    except Exception as e:
+        abort(502, f"Could not fetch flag: {e}")         
 # ==========================================================
 # UPDATE PITCH WHEN FORMATION CHANGES
 # ==========================================================
@@ -838,9 +857,9 @@ def update_pitch(formation):
         slot = html.Div(
             [
                 html.Img(
-                    src="/assets/goalkeeper_player.png"
+                    src="/assets/goalkeeper_player.webp"
                     if pos == "GK"
-                    else "/assets/green_player.png",
+                    else "/assets/green_player.webp",
                     className="jersey-img"
                 ),
 
